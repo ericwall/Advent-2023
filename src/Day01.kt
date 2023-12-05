@@ -1,17 +1,41 @@
 fun main() {
-    fun part1(input: List<String>): Int {
-        return input.size
-    }
+   readInput("Day01").sumOf { line ->
+        var baseLine = line
+        while (true) {
+            baseLine.NumberStringReplace()?.let {
+                baseLine = it
+            } ?: break
+        }
 
-    fun part2(input: List<String>): Int {
-        return input.size
-    }
-
-    // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
-
-    val input = readInput("Day01")
-    part1(input).println()
-    part2(input).println()
+        baseLine.getNumbers()
+    }.let {
+        println("Sum = $it")
+   }
 }
+
+fun String.getNumbers(): Int =
+    this.filter { it.digitToIntOrNull() != null }.let {
+        "${it.first()}${it.last()}".toInt()
+    }
+
+fun String.NumberStringReplace(): String? =
+    this.findAnyOf(stringMap.keys)?.let {
+        val matchingValue = it.second
+
+        stringMap[it.second]?.let {
+            this.replace(matchingValue, it)
+        }
+    }
+
+val stringNumbers = listOf("one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
+val stringMap = mapOf(
+    "one" to "1ne",
+    "two" to "2wo",
+    "three" to "3hree",
+    "four" to "4our",
+    "five" to "5ive",
+    "six" to "6ix",
+    "seven" to "7even",
+    "eight" to "8ight",
+    "nine" to "9ine"
+)
